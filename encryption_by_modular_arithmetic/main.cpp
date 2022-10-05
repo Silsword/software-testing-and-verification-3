@@ -13,5 +13,7 @@ namespace auxiliary_functions {
 	uint64_t inv(uint64_t a) {// (1 / a) по модулю 2^64, а - нечетное
 		return pow(a, 9223372036854775807ull);
 	}
+
+	void print_as_characters(std::ostream &out, uint64_t buf, int n = 8) {}
 }
 
