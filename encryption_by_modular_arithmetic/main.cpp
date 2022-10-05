@@ -9,5 +9,7 @@ namespace auxiliary_functions {
 		}
 		return res;
 	}
+
+	uint64_t inv(uint64_t a) {}// (1 / a) по модулю 2^64, а - нечетное
 }
 

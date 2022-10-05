@@ -22,4 +22,19 @@ namespace testing_functions {
 		// Assert
 		assert(answers == correct_answers);
 	}
+
+	void test_of_inv() {
+		// Arrange
+		const long number_of_tests = 7;
+		const std::vector<uint64_t> values =
+				{5ull, 2341ull, 74352411143447ull, 1241444124467ull,
+				 9684565244244423413ull, 23424223132347ull, 18446744073709551615ull};
+		std::vector<uint64_t> inv_values;
+		// Act
+		for (uint64_t value: values)
+			inv_values.push_back(auxiliary_functions::inv(value));
+		// Assert
+		for (size_t i = 0; i < number_of_tests; ++i)
+			assert(values[i]*inv_values[i] == 1);
+	}
 }
