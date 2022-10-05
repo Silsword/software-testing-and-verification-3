@@ -20,3 +20,7 @@ namespace auxiliary_functions {
 	}
 }
 
+//key - нечетное положительное число < 2^64
+void encrypt(const char *input_file_name, const char *output_file_name, const uint64_t key = 1234353354349ull) {}
+
+void decrypt(const char *input_file_name, const char *output_file_name, const uint64_t key = 1234353354349ull) {}

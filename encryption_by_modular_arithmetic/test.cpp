@@ -75,4 +75,43 @@ namespace testing_functions {
 
 		assert(answer == correct_answer);
 	}
+
+	bool files_are_equal(const char *file1_name, const char  *file2_name) {
+		std::ifstream file1(file1_name, std::ios::binary);
+		std::ifstream file2(file2_name, std::ios::binary);
+
+		char c1, c2;
+		file1.get(c1);
+		file2.get(c2);
+		while(!(file1.eof() || file2.eof())) {
+			if (c1 != c2) break;
+			file1.get(c1);
+			file2.get(c2);
+		}
+
+		bool res = file1.eof() && file2.eof();
+
+		file1.close();
+		file2.close();
+
+		return res;
+	}
+
+	void test_of_encryption_and_decryption() {
+		// Arrange
+		const char *test_file_name = "test";
+		std::ofstream test_file(test_file_name);
+		test_file << "Hello world! абра-\nкадабра";
+		test_file.close();
+		const char *encrypted_file_name = "encrypted_file";
+		const char *decrypted_file_name = "decrypted_file";
+		// Act
+		encrypt(test_file_name, encrypted_file_name);
+		decrypt(encrypted_file_name, decrypted_file_name);
+		// Assert
+		assert(files_are_equal(test_file_name, decrypted_file_name));
+		remove(test_file_name);
+		remove(encrypted_file_name);
+		remove(decrypted_file_name);
+	}
 }
