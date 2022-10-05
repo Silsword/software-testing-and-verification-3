@@ -14,6 +14,9 @@ namespace auxiliary_functions {
 		return pow(a, 9223372036854775807ull);
 	}
 
-	void print_as_characters(std::ostream &out, uint64_t buf, int n = 8) {}
+	void print_as_characters(std::ostream &out, uint64_t buf, int n = 8) {
+		for(int i = 7; i >= 8-n; --i)
+			out << static_cast<uint8_t>((buf >> (i * 8)) % 256);
+	}
 }
 
