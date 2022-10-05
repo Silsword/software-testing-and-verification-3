@@ -47,26 +47,5 @@ void encrypt(const char *input_file_name, const char *output_file_name, const ui
 }
 
 void decrypt(const char *input_file_name, const char *output_file_name, const uint64_t key = 1234353354349ull) {
-	std::ifstream in(input_file_name, std::ios::binary);
-	std::ofstream out(output_file_name, std::ios::binary);
-
-	uint64_t buf = 0;
-	int i = 0;
-	char c;
-	while(in.get(c)) {
-		buf <<= 8;
-		buf += static_cast<uint8_t>(c);
-		++i;
-		if(i == 8) {
-			auxiliary_functions::print_as_characters(out, buf * auxiliary_functions::inv(key));
-			buf = 0;
-			i = 0;
-		}
-	}
-	if (i != 0) {
-		buf <<= 8 * (8 - i);
-		auxiliary_functions::print_as_characters(out, buf * auxiliary_functions::inv(key), i);
-	}
-	in.close();
-	out.close();
+	encrypt(input_file_name, output_file_name, auxiliary_functions::inv(key));
 }
