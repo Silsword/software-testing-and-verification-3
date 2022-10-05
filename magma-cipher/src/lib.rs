@@ -31,10 +31,10 @@ fn generate_key() -> Vec<u8> {
 fn encrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
     let cipher = Magma::new(key.as_slice().into());
     let mut arr = arr;
-    for i in 0..(arr.len() % 8) {
+    for _ in 0..(arr.len() % 8) {
         arr.push(0);
     }
-    let mut chunks: Vec<&[u8]> = arr.chunks(8).collect();
+    let chunks: Vec<&[u8]> = arr.chunks(8).collect();
     let mut ret = Vec::new();
     for i in chunks.iter() {
         let mut block = GenericArray::clone_from_slice(*i);
@@ -46,7 +46,19 @@ fn encrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
 }
 
 fn decrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
-    todo!()
+    let cipher = Magma::new(key.as_slice().into());
+    let  chunks: Vec<&[u8]> = arr.chunks(8).collect();
+    let mut ret = Vec::new();
+    for i in chunks.iter() {
+        let mut block = GenericArray::clone_from_slice(*i);
+	cipher.decrypt_block(&mut block);
+	let mut block = block.to_vec();
+	ret.append(&mut block);
+    }
+    while let Some(0) = ret.last() {
+	ret.pop();
+    }
+    ret
 }
 
 fn bytes_from_file(path: &str) -> Vec<u8> {
