@@ -71,4 +71,15 @@ mod tests {
         let arr = encrypt_array(arr.into(), key.into());
         assert_eq!(arr, ciph_arr);
     }
+    
+    #[test]
+    fn test_decrypt_array() {
+	let key = hex!("FFEEDDCCBBAA99887766554433221100"
+		       "F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF");
+        let arr : Vec<u8> = hex!("FEDCBA9876543210").into();
+        let ciph_arr = hex!("4EE901E5C2D8CA3D");
+
+        let ciph_arr = decrypt_array(ciph_arr.into(), key.into());
+        assert_eq!(arr, ciph_arr);
+    }
 }
