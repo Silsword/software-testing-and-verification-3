@@ -114,13 +114,13 @@ namespace testing_functions {
 		// Arrange
 		const char *test_file_name = "test";
 		std::ofstream test_file(test_file_name);
-		test_file << "Hello world! абра-\nкадабра";
+		test_file << "Hello world!\nI'm glad to see you";//size % 8 == 0
 		test_file.close();
-		const char *encrypted_file_name = "encrypted_file";
-		const char *decrypted_file_name = "decrypted_file";
+		const char *encrypted_file_name = "test.enc";
+		const char *decrypted_file_name = "test.enc.dec";
 		// Act
-		encrypt(test_file_name, encrypted_file_name);
-		decrypt(encrypted_file_name, decrypted_file_name);
+		encrypt(test_file_name);
+		decrypt(encrypted_file_name);
 		// Assert
 		assert(files_are_equal(test_file_name, decrypted_file_name));
 		remove(test_file_name);
