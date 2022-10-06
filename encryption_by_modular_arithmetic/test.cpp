@@ -1,5 +1,6 @@
 #include <vector>
 #include <fstream>
+#include <set>
 
 #include "main.cpp"
 
@@ -74,6 +75,18 @@ namespace testing_functions {
 		remove(file_name);
 
 		assert(answer == correct_answer);
+	}
+
+	void test_of_random_key() {
+		std::set<uint64_t> answers;
+		const int num_keys = 100000;
+		const int acceptable_match = 1;
+		// Arrange
+		// Act
+		for(long i = 0; i < num_keys; ++i)
+			answers.insert(auxiliary_functions::random_key());
+		// Assert
+		assert(answers.size() >= num_keys - acceptable_match);
 	}
 
 	bool files_are_equal(const char *file1_name, const char  *file2_name) {

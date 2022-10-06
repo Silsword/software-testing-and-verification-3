@@ -18,6 +18,9 @@ namespace auxiliary_functions {
 		for(int i = 7; 0 <= i; --i)
 			out << static_cast<uint8_t>((buf >> (i * 8)) % 256);
 	}
+
+	uint64_t random_key() {//возвращает нечетное число, каждый байт которого не равен нулю
+	}
 }
 
 //key - нечетное положительное число < 2^64
