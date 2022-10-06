@@ -6,8 +6,6 @@ use magma::cipher::{
 };
 use magma::Magma;
 use rand::prelude::*;
-use safer_ffi::ffi_export;
-use safer_ffi::prelude::repr_c;
 
 use std::fs::{File, self};
 use std::io::{Read, Write};
@@ -38,9 +36,15 @@ pub extern "C" fn decrypt(path: *const raw::c_char) {
 }
 
 fn generate_key() -> Vec<u8> {
-    let ret : [u8; 32] = [0; 32];
-    let mut r = rand::thread_rng();
-    ret.iter().map(|_| (r.next_u32() % 256) as u8).collect()
+    if let Ok(mut f) = File::open("key.txt") {
+	let mut key = vec![0, 32];
+	f.read(&mut key).expect("Can not read key.txt");
+	key
+    } else {
+	let ret : [u8; 32] = [0; 32];
+	let mut r = rand::thread_rng();
+	ret.iter().map(|_| (r.next_u32() % 256) as u8).collect()
+    }
 }
 
 fn key_from_file() -> Vec<u8> {
@@ -59,7 +63,8 @@ fn key_to_file(key : Vec<u8>) {
 fn encrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
     let cipher = Magma::new(key.as_slice().into());
     let mut arr = arr;
-    for _ in 0..(8 - (arr.len() % 8)) {
+    let reminder = (8 - (arr.len() % 8)) % 8;
+    for _ in 0..reminder {
         arr.push(0);
     }
     let chunks: Vec<&[u8]> = arr.chunks(8).collect();
@@ -77,12 +82,14 @@ fn decrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
     let cipher = Magma::new(key.as_slice().into());
     let  chunks: Vec<&[u8]> = arr.chunks(8).collect();
     let mut ret = Vec::new();
-    dbg!(chunks.last());
     for i in chunks.iter() {
         let mut block = GenericArray::clone_from_slice(*i);
 	cipher.decrypt_block(&mut block);
 	let mut block = block.to_vec();
 	ret.append(&mut block);
+    }
+    while let Some(0) = ret.last() {
+	ret.pop().unwrap();
     }
     ret
 }
@@ -101,7 +108,7 @@ fn bytes_to_file(path: &String, arr : Vec<u8>, status: Status) {
         Status::Decrypted => if path.ends_with(".enc") { path.as_str()[0..path.len() - 4].to_string() } else { path.clone() },
     };
     let mut file = File::create(&path).expect("File not found!");
-    file.write_all(arr.as_slice());
+    file.write_all(arr.as_slice()).expect("Can not write to file");
 }
 
 #[cfg(test)]
@@ -117,6 +124,24 @@ mod tests {
 	
         let arr = encrypt_array(arr.into(), key.into());
         assert_eq!(arr, ciph_arr);
+    }
+
+    #[test]
+    fn test_encrypt_key_improve() {
+	let key = generate_key();
+	let arr = hex!("ABABBCBCABBCBCABFD093019A4");
+	let arr = encrypt_array(arr.into(), key);
+	assert_eq!(arr.len(), 16);
+    }
+
+    #[test]
+    fn test_decrypt_key_improve() {
+	let key = generate_key();
+	let arr = hex!("ABABBCBCABBCBCABFD093019A4");
+	let arr = encrypt_array(arr.into(), key.clone());
+	let arr = decrypt_array(arr, key);
+	dbg!(arr.clone());
+	assert_eq!(arr.len(), 13);
     }
     
     #[test]
