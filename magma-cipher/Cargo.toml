@@ -11,4 +11,3 @@ crate-type = ["dylib"]
 magma = "0.8"
 rand = "0.8"
 hex-literal = "0.3"
-safer-ffi = "0.0.10"
