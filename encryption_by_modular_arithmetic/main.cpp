@@ -14,7 +14,10 @@ namespace auxiliary_functions {
 		return pow(a, 9223372036854775807ull);
 	}
 
-	void print_as_characters(std::ostream &out, uint64_t buf) {}
+	void print_as_characters(std::ostream &out, uint64_t buf) {
+		for(int i = 7; 0 <= i; --i)
+			out << static_cast<uint8_t>((buf >> (i * 8)) % 256);
+	}
 }
 
 //key - нечетное положительное число < 2^64
@@ -37,7 +40,7 @@ void encrypt(const char *input_file_name, const char *output_file_name, const ui
 	}
 	if (i != 0) {
 		buf <<= 8 * (8 - i);
-		auxiliary_functions::print_as_characters(out, buf * key, i);
+		auxiliary_functions::print_as_characters(out, buf * key);
 	}
 	in.close();
 	out.close();
