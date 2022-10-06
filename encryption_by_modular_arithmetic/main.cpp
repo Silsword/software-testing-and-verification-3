@@ -1,3 +1,6 @@
+#include <fstream>
+#include <string>
+
 namespace auxiliary_functions {
 	uint64_t pow(uint64_t b, uint64_t e) {//b^e по модулю 2^64
 		uint64_t res = (e & 1) ? b : 1;
@@ -73,7 +76,7 @@ void encrypt(const char *input_file_name, const char *key_file_name) {
 	out.close();
 }
 
-void encrypt(const char *input_file_name) {//ключ по умолчанию
+extern "C" void encrypt(const char *input_file_name) {//ключ по умолчанию
 	using namespace std;
 	const char *key_file_name = ".default_key";
 	ofstream key_file(key_file_name, ios::trunc);
@@ -86,7 +89,7 @@ void encrypt(const char *input_file_name) {//ключ по умолчанию
 	remove(key_file_name);
 }
 
-void decrypt(const char *input_file_name, const char *key_file_name) {
+extern "C" void decrypt(const char *input_file_name, const char *key_file_name) {
 	using namespace std;
 	ifstream key_file(key_file_name);
 	uint64_t shift, multiplier;

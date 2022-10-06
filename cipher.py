@@ -37,6 +37,4 @@ if __name__ == "__main__":
         case _:
             lib = lib
         encryptor = ffi.dlopen(lib)
-        cipher(lib, path)    
-            
-
+        cipher(lib, path)

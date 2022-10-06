@@ -30,7 +30,7 @@ vector <int> open_key(const char* path_key_file){
     return key;
 }
 
-void encrypt(const char* input_file_name, const char* path_key){
+extern "C" void encrypt(const char* input_file_name, const char* path_key){
     std::ifstream in(input_file_name, std::ios::binary);
     string output_file_name = input_file_name + ".encal"s;
 	std::ofstream out(output_file_name, std::ios::binary);
@@ -46,7 +46,7 @@ void encrypt(const char* input_file_name, const char* path_key){
 	out.close();
 }
 
-void decrypt(const char* input_file_name, const char* path_key_file){
+extern "C" void decrypt(const char* input_file_name, const char* path_key_file){
     vector <int> key = open_key(path_key_file);
     std::ifstream in(input_file_name, std::ios::binary);
     string output_file_name = (input_file_name + ""s).substr((input_file_name + ""s).rfind("."));
@@ -60,5 +60,4 @@ void decrypt(const char* input_file_name, const char* path_key_file){
     }
 	in.close();
 	out.close();
-
 }
