@@ -86,7 +86,23 @@ dependencies = [
  "hex-literal",
  "magma",
  "rand",
+ "safer-ffi",
 ]
+
+[[package]]
+name = "mini_paste"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2499b7bd9834270bf24cfc4dd96be59020ba6fd7f3276b772aee2de66e82b63"
+dependencies = [
+ "mini_paste-proc_macro",
+]
+
+[[package]]
+name = "mini_paste-proc_macro"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e6c5f1f52e39b728e73af4b454f1b29173d4544607bd395dafe1918fd149db67"
 
 [[package]]
 name = "ppv-lite86"
@@ -123,6 +139,23 @@ checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom",
 ]
+
+[[package]]
+name = "safer-ffi"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "40c710243617290d86a49a30564d94d0b646eacf6d7b67035e20d6e8a21f1193"
+dependencies = [
+ "libc",
+ "mini_paste",
+ "safer_ffi-proc_macro",
+]
+
+[[package]]
+name = "safer_ffi-proc_macro"
+version = "0.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc02dc034daa0944eb133b448f261ef7422ccae768e30f30ce5cdeb4ae4e506c"
 
 [[package]]
 name = "typenum"
