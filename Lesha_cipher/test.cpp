@@ -19,4 +19,27 @@ namespace testing_functions {
         }
         remove(file_name);
     }
+
+    void test_encrypt_decrypt(){
+        char* file_name = "test";
+        char* path_key = "";
+        ofstream in(file_name, std::ios::binary);
+        const string correct_result = "Hello world!"s;
+        in << correct_result;
+        in.close();
+        char *expansion = ".encal";
+        char *decrypt_file_name = file_name + *expansion;
+        key_generation(path_key);
+        char *expansion_key = "key_encal";
+        char *key_file = path_key + *expansion_key;
+        encrypt(file_name, key_file);
+        decrypt(decrypt_file_name, key_file);
+        ifstream out(file_name, std::ios::binary);
+        for(int i = 0; i < correct_result.size(); ++i){
+            char let;
+            out.get(let);
+            assert(correct_result[i] == let);
+        }
+        remove(file_name);
+    }
 }
