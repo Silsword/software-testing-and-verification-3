@@ -1,5 +1,6 @@
 #include <vector>
 #include <fstream>
+#include <set>
 
 #include "main.cpp"
 
@@ -54,16 +55,16 @@ namespace testing_functions {
 	void test_of_print_as_characters() {
 		using namespace std;
 		const char *file_name = "temp.txt";
-		const vector<string> correct_answer = {"abcdef"s, "qwertyui"s, "a^@f&"s};
+		const vector<string> correct_answer = {"abcdefsd"s, "qwertyui"s, "()a^@f&%"s};
 		vector<string> answer;
 
-		for(const string &str: correct_answer) {//std.size() <= 8
+		for(const string &str: correct_answer) {//std.size() == 8
 			// Arrange
 			uint64_t buf = make_buf(str);
 			size_t n = str.size();
 			std::fstream file(file_name, std::ios::binary | std::ios::out | std::ios::trunc);
 			//Act
-			auxiliary_functions::print_as_characters(file, buf, n);
+			auxiliary_functions::print_as_characters(file, buf);
 			file.close();
 			// Assert
 			file = std::fstream(file_name, std::ios::binary | std::ios::in);
@@ -74,6 +75,18 @@ namespace testing_functions {
 		remove(file_name);
 
 		assert(answer == correct_answer);
+	}
+
+	void test_of_random_key() {
+		std::set<uint64_t> answers;
+		const int num_keys = 100000;
+		const int acceptable_match = 1;
+		// Arrange
+		// Act
+		for(long i = 0; i < num_keys; ++i)
+			answers.insert(auxiliary_functions::random_key());
+		// Assert
+		assert(answers.size() >= num_keys - acceptable_match);
 	}
 
 	bool files_are_equal(const char *file1_name, const char  *file2_name) {
@@ -101,13 +114,13 @@ namespace testing_functions {
 		// Arrange
 		const char *test_file_name = "test";
 		std::ofstream test_file(test_file_name);
-		test_file << "Hello world! абра-\nкадабра";
+		test_file << "Hello world!\nI'm glad to see you";//size % 8 == 0
 		test_file.close();
-		const char *encrypted_file_name = "encrypted_file";
-		const char *decrypted_file_name = "decrypted_file";
+		const char *encrypted_file_name = "test.enc";
+		const char *decrypted_file_name = "test.enc.dec";
 		// Act
-		encrypt(test_file_name, encrypted_file_name);
-		decrypt(encrypted_file_name, decrypted_file_name);
+		encrypt(test_file_name);
+		decrypt(encrypted_file_name);
 		// Assert
 		assert(files_are_equal(test_file_name, decrypted_file_name));
 		remove(test_file_name);
