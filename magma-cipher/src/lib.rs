@@ -76,12 +76,14 @@ fn decrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
     let cipher = Magma::new(key.as_slice().into());
     let  chunks: Vec<&[u8]> = arr.chunks(8).collect();
     let mut ret = Vec::new();
-    dbg!(chunks.last());
     for i in chunks.iter() {
         let mut block = GenericArray::clone_from_slice(*i);
 	cipher.decrypt_block(&mut block);
 	let mut block = block.to_vec();
 	ret.append(&mut block);
+    }
+    while let Some(0) = ret.last() {
+	ret.pop().unwrap();
     }
     ret
 }
@@ -100,7 +102,7 @@ fn bytes_to_file(path: &String, arr : Vec<u8>, status: Status) {
         Status::Decrypted => if path.ends_with(".enc") { path.as_str()[0..path.len() - 4].to_string() } else { path.clone() },
     };
     let mut file = File::create(&path).expect("File not found!");
-    file.write_all(arr.as_slice());
+    file.write_all(arr.as_slice()).expect("Can not write to file");
 }
 
 #[cfg(test)]
@@ -116,6 +118,24 @@ mod tests {
 	
         let arr = encrypt_array(arr.into(), key.into());
         assert_eq!(arr, ciph_arr);
+    }
+
+    #[test]
+    fn test_encrypt_key_improve() {
+	let key = generate_key();
+	let arr = hex!("ABABBCBCABBCBCABFD093019A4");
+	let arr = encrypt_array(arr.into(), key);
+	assert_eq!(arr.len(), 16);
+    }
+
+    #[test]
+    fn test_decrypt_key_improve() {
+	let key = generate_key();
+	let arr = hex!("ABABBCBCABBCBCABFD093019A4");
+	let arr = encrypt_array(arr.into(), key.clone());
+	let arr = decrypt_array(arr, key);
+	dbg!(arr.clone());
+	assert_eq!(arr.len(), 13);
     }
     
     #[test]
