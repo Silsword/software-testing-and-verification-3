@@ -6,8 +6,6 @@ use magma::cipher::{
 };
 use magma::Magma;
 use rand::prelude::*;
-use safer_ffi::ffi_export;
-use safer_ffi::prelude::repr_c;
 
 use std::fs::{File, self};
 use std::io::{Read, Write};
@@ -59,7 +57,8 @@ fn key_to_file(key : Vec<u8>) {
 fn encrypt_array(arr: Vec<u8>, key: Vec<u8>) -> Vec<u8> {
     let cipher = Magma::new(key.as_slice().into());
     let mut arr = arr;
-    for _ in 0..(8 - (arr.len() % 8)) {
+    let reminder = (8 - (arr.len() % 8)) % 8;
+    for _ in 0..reminder {
         arr.push(0);
     }
     let chunks: Vec<&[u8]> = arr.chunks(8).collect();
