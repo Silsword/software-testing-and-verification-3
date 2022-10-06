@@ -1,5 +1,5 @@
 #include <cassert>
-#include <vector>
+#include "coder.cpp"
 
 using namespace std;
 
