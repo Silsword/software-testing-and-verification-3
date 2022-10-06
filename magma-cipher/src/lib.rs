@@ -36,9 +36,15 @@ pub extern "C" fn decrypt(path: *const raw::c_char) {
 }
 
 fn generate_key() -> Vec<u8> {
-    let ret : [u8; 32] = [0; 32];
-    let mut r = rand::thread_rng();
-    ret.iter().map(|_| (r.next_u32() % 256) as u8).collect()
+    if let Ok(mut f) = File::open("key.txt") {
+	let mut key = vec![0, 32];
+	f.read(&mut key).expect("Can not read key.txt");
+	key
+    } else {
+	let ret : [u8; 32] = [0; 32];
+	let mut r = rand::thread_rng();
+	ret.iter().map(|_| (r.next_u32() % 256) as u8).collect()
+    }
 }
 
 fn key_from_file() -> Vec<u8> {
