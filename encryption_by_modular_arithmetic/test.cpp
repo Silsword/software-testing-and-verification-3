@@ -54,16 +54,16 @@ namespace testing_functions {
 	void test_of_print_as_characters() {
 		using namespace std;
 		const char *file_name = "temp.txt";
-		const vector<string> correct_answer = {"abcdef"s, "qwertyui"s, "a^@f&"s};
+		const vector<string> correct_answer = {"abcdefsd"s, "qwertyui"s, "()a^@f&%"s};
 		vector<string> answer;
 
-		for(const string &str: correct_answer) {//std.size() <= 8
+		for(const string &str: correct_answer) {//std.size() == 8
 			// Arrange
 			uint64_t buf = make_buf(str);
 			size_t n = str.size();
 			std::fstream file(file_name, std::ios::binary | std::ios::out | std::ios::trunc);
 			//Act
-			auxiliary_functions::print_as_characters(file, buf, n);
+			auxiliary_functions::print_as_characters(file, buf);
 			file.close();
 			// Assert
 			file = std::fstream(file_name, std::ios::binary | std::ios::in);
