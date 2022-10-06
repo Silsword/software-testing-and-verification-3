@@ -20,6 +20,17 @@ namespace auxiliary_functions {
 	}
 
 	uint64_t random_key() {//возвращает нечетное число, каждый байт которого не равен нулю
+		//генерация
+		uint64_t res = rand();
+		res <<= 32;
+		res += rand();
+		//проверка
+		bool b = res & 1;
+		for(int i = 15; i >= 0; --i)
+			b = b && (res >> i);
+
+		if (!b) res = random_key();
+		return res;
 	}
 }
 
